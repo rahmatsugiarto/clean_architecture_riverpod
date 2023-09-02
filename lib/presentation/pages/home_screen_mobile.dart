@@ -1,6 +1,3 @@
-import '../widgets/error_view.dart';
-import '../widgets/loading_view.dart';
-import '../widgets/no_data_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -10,6 +7,9 @@ import '../../common/state/view_data_state.dart';
 import '../../domain/entities/movie_entity.dart';
 import '../provider/home_provider.dart';
 import '../widgets/custom_refresh_indicator.dart';
+import '../widgets/error_view.dart';
+import '../widgets/loading_view.dart';
+import '../widgets/no_data_view.dart';
 
 class HomeScreenMobile extends StatefulHookConsumerWidget {
   const HomeScreenMobile({super.key});
@@ -64,66 +64,74 @@ class _HomeScreenState extends ConsumerState<HomeScreenMobile> {
               padding: const EdgeInsets.symmetric(vertical: 20),
               itemBuilder: (BuildContext context, int index) {
                 final movie = listMovies[index];
-                return Container(
-                  margin: const EdgeInsets.only(
-                    bottom: 10,
-                    left: 20,
-                    right: 20,
-                  ),
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Column(
+
+                return LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Container(
+                      margin: const EdgeInsets.only(
+                        bottom: 10,
+                        left: 20,
+                        right: 20,
+                      ),
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(Strings.title),
-                              Text(Strings.year),
-                              Text(Strings.runtime),
-                              Text(Strings.poster),
+                              const Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(Strings.title),
+                                  Text(Strings.year),
+                                  Text(Strings.runtime),
+                                  Text(Strings.poster),
+                                ],
+                              ),
+                              const SizedBox(
+                                width: 8.0,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      ": ${movie.title}",
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
+                                    Text(": ${movie.year}"),
+                                    Text(": ${movie.runtime}"),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        const Text(": "),
+                                        Opacity(
+                                          opacity: animationController.value,
+                                          child: Image.network(
+                                            movie.poster,
+                                            width: constraints.maxWidth / 1.8,
+                                            errorBuilder:
+                                                (context, error, stackTrace) {
+                                              return const SizedBox.shrink();
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
-                          const SizedBox(
-                            width: 8.0,
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  ": ${movie.title}",
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                                Text(": ${movie.year}"),
-                                Text(": ${movie.runtime}"),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    const Text(": "),
-                                    Opacity(
-                                      opacity: animationController.value,
-                                      child: Image.network(
-                                        movie.poster,
-                                        errorBuilder:
-                                            (context, error, stackTrace) {
-                                          return const SizedBox.shrink();
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 );
               },
             ),
