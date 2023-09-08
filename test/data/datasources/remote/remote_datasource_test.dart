@@ -39,5 +39,14 @@ void main() {
       // assert
       expect(result, equals(tListMoviesResponse));
     });
+
+    test("should return rethrow when unsuccessful ", () {
+      // arrange
+      when(() => mockDio.get(any())).thenThrow(Exception());
+      // act
+      final result = remoteDataSourceImpl.fetchListMovies();
+      // assert
+      expect(result, throwsA(isA<Exception>()));
+    });
   });
 }
