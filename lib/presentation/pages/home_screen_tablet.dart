@@ -1,4 +1,3 @@
-import '../widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -9,6 +8,7 @@ import '../../domain/entities/movie_entity.dart';
 import '../provider/home_provider.dart';
 import '../widgets/custom_refresh_indicator.dart';
 import '../widgets/error_view.dart';
+import '../widgets/loading_view.dart';
 import '../widgets/no_data_view.dart';
 
 class HomeScreenTablet extends StatefulHookConsumerWidget {
